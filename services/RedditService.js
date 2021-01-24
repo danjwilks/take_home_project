@@ -1,5 +1,7 @@
 const fetch = require("node-fetch");
 
+// gets and return sanitised json of the top
+// reddit posts specified by subreddit param
 exports.getTopPosts = async function(subreddit) {
     try {
         const url = buildTopPostsUrl(subreddit);
@@ -10,6 +12,9 @@ exports.getTopPosts = async function(subreddit) {
         return {success : true, topPosts : formattedPosts}
     } catch (error) {
         let err = error;
+        // if the error is due to the fetch, return the error
+        // assosiated with the fetch. Otherwise error must be
+        // due to an internal issue.
         if (!error.isFetch) {
             err = new Error('Internal Error');
             err.status = 500;    
@@ -18,6 +23,7 @@ exports.getTopPosts = async function(subreddit) {
     }
 };
 
+// format the post objects to follow the JSON:API spec
 function formatPosts(sanitisedPosts) {
     var formattedPosts = [];
     for (sanitisedPost of sanitisedPosts) {
@@ -30,6 +36,8 @@ function formatPosts(sanitisedPosts) {
     return formattedPosts;
 }
 
+// returns url for the top 10 posts of all time within
+// givem subreddit.
 function buildTopPostsUrl(subreddit) {
     const url = `https://www.reddit.com/r/${subreddit}/top/.json?t=all&limit=10`;
     return url;
