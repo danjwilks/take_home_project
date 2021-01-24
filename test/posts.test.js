@@ -13,7 +13,7 @@ describe("posts route", () => {
             .expect(200)
             .end(done);
     });
-    it("returns correct HTTP status codes", (done) => {
+    it("handles invalid subreddit requests", (done) => {
         const notFound = request(app)
             .get('/posts/top/thisSubDoesNotExist9999')
             .expect(404)
