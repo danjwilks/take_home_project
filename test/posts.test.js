@@ -23,16 +23,31 @@ describe("posts route", () => {
                 done();
             });
     });
-    // following the JSON:API spec. Array can be empty.
+    // following the JSON:API spec.
     it("has array of resource objects within top level of data", (done) => {
         request(app)
             .get('/posts/top/ttd')
             .end((err, res) => {
                 if (err) {return done(err);};
                 expect(res.body.data).to.be.instanceof(Array);
+                // /r/ttd has more than 10 posts
+                expect(res.body.data.length).to.equal(10);
                 for (resourceObject in res.body.data) {
-                    expect(resourceObject).to.be.have.property('id');
-                    expect(resourceObject).to.be.have.property('type');
+                    expect(resourceObject).to.have.property('id');
+                    expect(resourceObject).to.have.property('type');
+                    expect(resourceObject).to.have.property('attributes');
+                }
+                done();
+            });
+    });
+    it("has each resource object has reddit post properties", (done) => {
+        request(app)
+            .get('/posts/top/soccer')
+            .end((err, res) => {
+                if (err) {return done(err);};
+                for (post in res.body.data) {
+                    expect(post.attributes).to.have.property('id');
+                    expect(post.attributes).to.have.property('type');
                 }
                 done();
             });
