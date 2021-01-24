@@ -1,4 +1,4 @@
-const { expect } = require('chai');
+const {expect} = require('chai');
 const request = require('supertest');
 const app = require('../app');
 
@@ -40,16 +40,16 @@ describe("posts route", () => {
                 done();
             });
     });
-    // it("has each resource object has reddit post properties", (done) => {
-    //     request(app)
-    //         .get('/posts/top/soccer')
-    //         .end((err, res) => {
-    //             if (err) {return done(err);};
-    //             for (post of res.body.data) {
-    //                 expect(post.attributes).to.have.property('title');
-    //                 // expect(post.attributes).to.have.property('type');
-    //             }
-    //             done();
-    //         });
-    // });
+    it("has each resource object has reddit post properties", (done) => {
+        request(app)
+            .get('/posts/top/soccer')
+            .end((err, res) => {
+                if (err) {return done(err);};
+                for (post of res.body.data) {
+                    expect(post.attributes).to.have.property('title');
+                    // expect(post.attributes).to.have.property('type');
+                }
+                done();
+            });
+    });
 });
