@@ -13,6 +13,12 @@ describe("posts route", () => {
             .expect(200)
             .end(done);
     });
+    it("returns correct HTTP status codes", (done) => {
+        const notFound = request(app)
+            .get('/posts/top/thisSubDoesNotExist9999')
+            .expect(404)
+            .end(done);
+    });
     // following the JSON:API spec
     it("has data property within top level of response body", (done) => {
         request(app)

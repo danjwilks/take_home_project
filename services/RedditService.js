@@ -1,23 +1,17 @@
 const fetch = require("node-fetch");
 
 exports.getTopPosts = async function(subreddit) {
-    var result = [];
-    for (i = 0; i < 10; i++) {
-        result.push({
-            id: 'id',
-            type: 'type',
-            attributes: {
-                title: 'title'
-            }
-        });
+    try {
+        const url = buildTopPostsUrl(subreddit);
+        const redditJson = await fetchRedditJson(url);
+        const unsanitisedPosts = parsePostsFromRedditJson(redditJson);
+        const sanitisedPosts = sanitisePosts(unsanitisedPosts);
+        const formattedPost = formatPosts(sanitisedPosts);
+        return formattedPost;
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
     }
-
-    const url = buildTopPostsUrl(subreddit);
-    const redditJson = await fetchRedditJson(url);
-    const unsanitisedPosts = parsePostsFromRedditJson(redditJson);
-    const sanitisedPosts = sanitisePosts(unsanitisedPosts);
-    const formattedPost = formatPosts(sanitisedPosts);
-    return formattedPost;
 };
 
 function formatPosts(sanitisedPosts) {
