@@ -1,0 +1,11 @@
+{
+  "name": "top-reddit-posts",
+  "version": "1.0.0",
+  "description": "Web Application for searching and viewing top posts of Reddit subreddits.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Wilks",
+  "license": "ISC"
+}
