@@ -2,13 +2,13 @@ const {getTopPosts} = require('../services/RedditService');
 
 exports.topPosts = async function (req, res) {
     const subreddit = req.params.subreddit;
-    try {
-        const topPosts = await getTopPosts(subreddit);
+    const result = await getTopPosts(subreddit);
+
+    if (result.success) {
         return res.json({
-            data: topPosts
-        });
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
+            data: result.topPosts
+        })
+    } else {
+        res.status(result.err.status).send(result.err);
     }
 };

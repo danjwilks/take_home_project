@@ -4,13 +4,19 @@ exports.getTopPosts = async function(subreddit) {
     try {
         const url = buildTopPostsUrl(subreddit);
         const redditJson = await fetchRedditJson(url);
+        if (redditJson.error) {
+            let err = new Error(redditJson.message);
+            err.status = redditJson.error;
+            return {success: false, err: err};
+        }
         const unsanitisedPosts = parsePostsFromRedditJson(redditJson);
         const sanitisedPosts = sanitisePosts(unsanitisedPosts);
-        const formattedPost = formatPosts(sanitisedPosts);
-        return formattedPost;
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err);
+        const formattedPosts = formatPosts(sanitisedPosts);
+        return {success : true, topPosts : formattedPosts}
+    } catch (error) {
+        let err = new Error('Internal Error');
+        err.status = 500;
+        return {success: false, err: err}
     }
 };
 
